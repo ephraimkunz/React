@@ -50,7 +50,6 @@ class RandomNumberGen extends Component {
   }
 
   render() {
-    const rngGenMessage = this.state.rand >= 0 ? "Random number: " + this.state.rand : "";
     return (
       <div>
         <div>
@@ -64,11 +63,19 @@ class RandomNumberGen extends Component {
             <input type="submit" value="Generate"/>
           </form>
         </div>
-        <div>
-          {rngGenMessage}
-        </div>
+        <RNGResult number={this.state.rand}/>
       </div>
     );
+  }
+}
+
+class RNGResult extends Component {
+  render() {
+    if(this.props.number < 0) 
+      return null;
+    return (
+      <div>Random number: {this.props.number}</div>
+    );  
   }
 }
 
