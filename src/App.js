@@ -10,41 +10,63 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <Button text="custom text 1" />
-        <Listy list={["Hi", "this", "is", "my", "name"]} />
-        <Button text="custom hello 2" />
-        <Button text="Megan"/>
-        <Listy list={["A", "B", "C"]}/>
+       <h2>Random number generator</h2>
+       <RandomNumberGen />
       </div>
     );
   }
 }
 
-class Button extends Component {
+class RandomNumberGen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {count: 0, prevRNG: 0, upper: 0, lower: 0};
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onLowerChange = this.onLowerChange.bind(this);
+    this.onUpperChange = this.onUpperChange.bind(this);
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setState({prevRNG: Math.random()});
+  }
+
+  onUpperChange(e) {
+    e.preventDefault();
+    this.setState({upper: e.target.value});
+  }
+
+  onLowerChange(e) {
+    e.preventDefault();
+    this.setState({lower: e.target.value});
+  }
+
+  generateRandomInRange(lower, upper) {
+    return this.state.prevRNG * (upper - lower) + lower;
+  }
+
   render() {
+    const rngGenMessage = this.state.prevRNG ? "Random number: " + this.generateRandomInRange(this.state.lower, this.state.upper) : "Click 'Generate' to generate a random number";
     return (
-      <h1>
-        This is a test of a custom button component in React with custom text: {this.props.text}
-      </h1>
-    )
+      <div>
+        <div>
+          <form onSubmit={this.onSubmit}>
+            <label>Lower acceptable
+              <input type="text" value={this.state.lower} onChange={this.onLowerChange} />
+            </label>
+            <label>Upper acceptable
+              <input type="text" value={this.state.upper} onChange={this.onUpperChange} />
+            </label>
+            <input type="submit" value="Generate"/>
+          </form>
+        </div>
+        <div>
+          {rngGenMessage}
+        </div>
+      </div>
+    );
   }
 }
 
-class Listy extends Component {
-  render() {
-    const list_items = this.props.list.map(item => (
-      <li>{item}</li>
-    ));
-
-    return (
-      <ul>
-        {list_items}
-      </ul>
-    )
-  }
-}
 
 export default App;
