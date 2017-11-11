@@ -20,7 +20,7 @@ class App extends Component {
 class RandomNumberGen extends Component {
   constructor(props) {
     super(props);
-    this.state = {count: 0, prevRNG: 0, upper: 0, lower: 0};
+    this.state = {rand: -1, upper: 0, lower: 0};
     this.onSubmit = this.onSubmit.bind(this);
     this.onLowerChange = this.onLowerChange.bind(this);
     this.onUpperChange = this.onUpperChange.bind(this);
@@ -28,12 +28,16 @@ class RandomNumberGen extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.setState({prevRNG: Math.random()});
+    this.setState(function(oldState, props) {
+      return {
+        rand: this.generateRandomInRange(parseInt(oldState.lower), parseInt(oldState.upper))
+      }
+    });
   }
 
   onUpperChange(e) {
     e.preventDefault();
-    this.setState({upper: e.target.value});
+      this.setState({upper: e.target.value});
   }
 
   onLowerChange(e) {
@@ -42,11 +46,11 @@ class RandomNumberGen extends Component {
   }
 
   generateRandomInRange(lower, upper) {
-    return this.state.prevRNG * (upper - lower) + lower;
+    return Math.round(Math.random() * (upper - lower) + lower);
   }
 
   render() {
-    const rngGenMessage = this.state.prevRNG ? "Random number: " + this.generateRandomInRange(this.state.lower, this.state.upper) : "Click 'Generate' to generate a random number";
+    const rngGenMessage = this.state.rand >= 0 ? "Random number: " + this.state.rand : "";
     return (
       <div>
         <div>
